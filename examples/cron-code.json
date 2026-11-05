@@ -1,0 +1,39 @@
+{
+  "name": "Weekly digest",
+  "description": "",
+  "inactive": false,
+  "settings": {},
+  "triggers": [
+    {
+      "type": "timer",
+      "disabled": false,
+      "props": {
+        "cron": "0 9 * * 1",
+        "timezone": "Europe/Warsaw"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "namespace": "build_digest",
+      "lang": "nodejs20.x",
+      "disabled": false,
+      "props": {},
+      "uses": {
+        "registry": false,
+        "code": "export default defineComponent({\n  async run({ steps, $ }) {\n    const event = steps.trigger.event;\n    return { title: \"Weekly\" };\n  },\n});\n"
+      }
+    },
+    {
+      "namespace": "render_subject",
+      "lang": "nodejs20.x",
+      "disabled": false,
+      "props": {},
+      "uses": {
+        "registry": false,
+        "code": "export default defineComponent({\n  async run({ steps, $ }) {\n    const digest = steps.build_digest.$return_value;\n    return { subject: digest.title };\n  },\n});\n"
+      }
+    }
+  ],
+  "deployments": {}
+}
