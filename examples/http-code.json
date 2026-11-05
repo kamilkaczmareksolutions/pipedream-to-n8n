@@ -1,0 +1,29 @@
+{
+  "name": "Inbound hook",
+  "description": "",
+  "inactive": false,
+  "settings": {},
+  "triggers": [
+    {
+      "type": "http",
+      "disabled": false,
+      "props": {
+        "method": "POST",
+        "path": "inbound-hook"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "namespace": "normalize",
+      "lang": "python3.11",
+      "disabled": false,
+      "props": {},
+      "uses": {
+        "registry": false,
+        "code": "def handler(pd):\n    return pd.steps[\"trigger\"][\"event\"]\n"
+      }
+    }
+  ],
+  "deployments": {}
+}

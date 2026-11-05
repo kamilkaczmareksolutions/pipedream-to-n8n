@@ -1,0 +1,65 @@
+{
+  "name": "Lead router",
+  "description": "",
+  "inactive": false,
+  "settings": {},
+  "triggers": [
+    {
+      "type": "http",
+      "disabled": false,
+      "props": {
+        "method": "POST",
+        "path": "lead-router",
+        "api_key": "<redacted>"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "namespace": "shape_lead",
+      "lang": "nodejs20.x",
+      "disabled": false,
+      "props": {},
+      "uses": {
+        "registry": false,
+        "code": "export default defineComponent({\n  async run({ steps, $ }) {\n    return steps.trigger.event;\n  },\n});\n"
+      }
+    },
+    {
+      "namespace": "send_slack",
+      "lang": "nodejs20.x",
+      "disabled": false,
+      "props": {
+        "channel": "#leads",
+        "slack": {
+          "authProvisionId": "apn_example"
+        }
+      },
+      "uses": {
+        "registry": true,
+        "key": "slack-send-message",
+        "version": "1.0.0"
+      },
+      "component_key": "slack-send-message"
+    },
+    {
+      "namespace": "old_debug",
+      "lang": "nodejs20.x",
+      "disabled": true,
+      "props": {},
+      "uses": {
+        "registry": false,
+        "code": "export default defineComponent({ async run() { return {}; } });\n"
+      }
+    }
+  ],
+  "deployments": {
+    "dep_branch": {
+      "steps": [
+        {
+          "namespace": "side_path"
+        }
+      ]
+    }
+  }
+}
